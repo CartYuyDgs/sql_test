@@ -75,6 +75,10 @@ class User01(db.Model):
     username = db.Column(db.String(30), nullable=False)
     article01 = relationship("Article01",back_populates='auther')
 
+    __mapper_args__ = {
+        "order_by": username
+    }
+
     def __repr__(self):
         return "<User01 username:%s>"%self.username
 
@@ -86,6 +90,10 @@ class Article01(db.Model):
 
     uid = db.Column(db.Integer, db.ForeignKey("user01.id"))
     auther = relationship("User01", back_populates="article01")
+
+    __mapper_args__ = {
+        "order_by": title
+    }
 
     def __repr__(self):
         return "<User01 title:%s,uidL%d >"%(self.title,self.uid)

@@ -91,6 +91,18 @@ def addtc(Teachername1,tno,Teachername2,tno2,Classe1,cno,Classe2,cno2):
     print("信息添加成功")
 
 @manage.command
+def test_relation00():
+    user = User01(username = "asss")
+    article = Article01(title="hadh",context="uaaffdduuuuuu")
+    article.auther = user
+    user1 = User01(username="asss1111")
+    user2 = User01(username="asss1111")
+    db.session.add(user1)
+    db.session.add(user2)
+    db.session.add(user)
+    db.session.commit()
+
+@manage.command
 def test_relation01():
     user = User01.query.filter(User01.username == "asss").first()
     article = Article01(title="hadh",context="uaaffdduuuuuu")
@@ -125,6 +137,13 @@ def test_relation02():
     # db.session.add(user)
     # db.session.add(article)
     # db.session.commit()
+
+@manage.command
+def delete_info():
+    articles = Article01.query.filter(Article01.id <= 100).all()
+    for i in articles:
+        db.session.delete(i)
+    db.session.commit()
 
 
 if __name__ == '__main__':
