@@ -28,7 +28,7 @@ class One(db.Model):
     __tablename__ = 'one_table'
     one_index = db.Column(db.Integer,primary_key=True,autoincrement=True)
     one_name = db.Column(db.String(30))
-    one_id = db.Column(db.Integer,db.ForeignKey('user_id.id'))
+    # one_id = db.Column(db.Integer,db.ForeignKey('user_id.id'))
     one_age = db.Column(db.Integer,nullable=True)
     book = relationship('Book',order_by=Book.id,back_populates='book_one')
 
@@ -52,4 +52,42 @@ class Classes(db.Model):
     name = db.Column(db.String(50))
     cno = db.Column(db.String(20))
     teachers = relationship('Teacher',secondary=association_table,back_populates='classes')
+
+class City(db.Model):
+    __tablename__ = "apf_city"
+    city_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    code = db.Column(db.String(9),nullable=True)
+    weather_id = db.Column(db.String(11),nullable=True)
+    name = db.Column(db.String(16),nullable=True)
+    status = db.Column(db.String(1),nullable=True, default = '0')
+    province_id = db.Column(db.Integer, db.ForeignKey("apf_province.province_id"))
+    province = relationship("Province", back_populates='city')
+
+class Province(db.Model):
+    __tablename__ = "apf_province"
+    province_id = db.Column(db.Integer,primary_key=True,autoincrement=True)
+    name = db.Column(db.String(32),nullable=True)
+    city = relationship("City",back_populates='province')
+
+class User01(db.Model):
+    __tablename__ = 'user01'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    username = db.Column(db.String(30), nullable=False)
+    article01 = relationship("Article01",back_populates='auther')
+
+    def __repr__(self):
+        return "<User01 username:%s>"%self.username
+
+class Article01(db.Model):
+    __tablename__ = "article01"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(30),nullable=True)
+    context = db.Column(db.Text)
+
+    uid = db.Column(db.Integer, db.ForeignKey("user01.id"))
+    auther = relationship("User01", back_populates="article01")
+
+    def __repr__(self):
+        return "<User01 title:%s,uidL%d >"%(self.title,self.uid)
+
 

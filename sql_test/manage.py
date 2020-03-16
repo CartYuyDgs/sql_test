@@ -2,7 +2,7 @@ from flask_script import Manager,Command,Option
 from flask_migrate import Migrate,MigrateCommand
 from app import app
 from exts import db
-from apps.model import User,UserId,One,Book,Teacher,Classes
+from apps.model import User,UserId,One,Book,Teacher,Classes,User01,Article01
 
 manage = Manager(app)
 magrate = Migrate(app,db)
@@ -89,6 +89,42 @@ def addtc(Teachername1,tno,Teachername2,tno2,Classe1,cno,Classe2,cno2):
     db.session.add(classes2)
     db.session.commit()
     print("信息添加成功")
+
+@manage.command
+def test_relation01():
+    user = User01.query.filter(User01.username == "asss").first()
+    article = Article01(title="hadh",context="uaaffdduuuuuu")
+    article.auther = user
+
+    # db.session.add(user)
+    db.session.add(article)
+    db.session.commit()
+
+@manage.command
+def test_data():
+    user = User01.query.filter(User01.username == "asss").first()
+    for i in range(100):
+        article = Article01(title="hadh%s"%str(i),context="uaaffdduuuuuu%s"%str(i))
+        article.auther = user
+        db.session.add(article)
+    # db.session.add(user)
+
+    db.session.commit()
+
+@manage.command
+def test_relation02():
+    user = User01.query.filter(User01.username == "asss").first()
+    articles = user.article01
+    print(articles[:10])
+    print(articles[0].context)
+    print(articles[1].context)
+    print("===========================")
+    # for i in articles:
+    #     info = Article01.query.filter(Article01.id == i.id).all()
+    #     print(info[0].context)
+    # db.session.add(user)
+    # db.session.add(article)
+    # db.session.commit()
 
 
 if __name__ == '__main__':
